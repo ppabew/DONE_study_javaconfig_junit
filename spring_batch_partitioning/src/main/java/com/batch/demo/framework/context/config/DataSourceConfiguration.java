@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -46,15 +47,11 @@ public class DataSourceConfiguration {
      * @throws Exception
      */
     @Bean(name="sqlSessionFactory")
-    public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource, ApplicationContext applicationContext) throws java.lang.Exception{
-        System.out.println("dataSource : "+dataSource);
-        SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
-        sqlSessionFactoryBean.setDataSource(dataSource);
-        sqlSessionFactoryBean.setTypeAliasesPackage("com.batch.demo.business.batch.vo");
-        sqlSessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:mybatis-config.xml"));
-        sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:mapper/**/*.xml"));
-        sqlSessionFactoryBean.setVfs(SpringBootVFS.class);
-        return sqlSessionFactoryBean.getObject();
+    public SqlSessionFactoryBean sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource, ApplicationContext applicationContext) throws java.lang.Exception{
+        SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
+        sessionFactoryBean.setDataSource(dataSource);
+        sessionFactoryBean.setConfigLocation(new ClassPathResource("/mybatis-config.xml"));
+        return sessionFactoryBean;
     }
 
     /**
@@ -66,9 +63,7 @@ public class DataSourceConfiguration {
      */
     @Bean(name="transactionManager")
     public PlatformTransactionManager transactionManager(@Qualifier("dataSource") DataSource dataSource) throws java.lang.Exception {
-        DataSourceTransactionManager dataSourceTransactionManager = new DataSourceTransactionManager(dataSource);
-        dataSourceTransactionManager.setGlobalRollbackOnParticipationFailure(false);
-        return dataSourceTransactionManager;
+       return new DataSourceTransactionManager(dataSource);
     }
 
 }
