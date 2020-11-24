@@ -50,7 +50,7 @@ public class DataSourceConfiguration {
         System.out.println("dataSource : "+dataSource);
         SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
         sqlSessionFactoryBean.setDataSource(dataSource);
-        sqlSessionFactoryBean.setTypeAliasesPackage("com.nws.zabbix.api.busineess.batvch.vo");
+        sqlSessionFactoryBean.setTypeAliasesPackage("com.batch.demo.business.batch.vo");
         sqlSessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:mybatis-config.xml"));
         sqlSessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:mapper/**/*.xml"));
         sqlSessionFactoryBean.setVfs(SpringBootVFS.class);
