@@ -23,7 +23,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableConfigurationProperties
 @EnableTransactionManagement
-@MapperScan(basePackages = "com.batch.demo.**.mapper", sqlSessionFactoryRef = "sqlSessionFactory")
+@MapperScan(basePackages = "com.batch.demo.**.**.mapper", sqlSessionFactoryRef = "sqlSessionFactory")
 public class DataSourceConfiguration {
 
     /**
@@ -47,11 +47,12 @@ public class DataSourceConfiguration {
      * @throws Exception
      */
     @Bean(name="sqlSessionFactory")
-    public SqlSessionFactoryBean sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource, ApplicationContext applicationContext) throws java.lang.Exception{
+    public SqlSessionFactory sqlSessionFactory(@Qualifier("dataSource") DataSource dataSource, ApplicationContext applicationContext) throws java.lang.Exception{
         SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
         sessionFactoryBean.setDataSource(dataSource);
-        sessionFactoryBean.setConfigLocation(new ClassPathResource("/mybatis-config.xml"));
-        return sessionFactoryBean;
+        sessionFactoryBean.setConfigLocation(applicationContext.getResource("classpath:mybatis-config.xml"));
+        sessionFactoryBean.setMapperLocations(applicationContext.getResources("classpath:/mapper/*.xml"));
+        return sessionFactoryBean.getObject();
     }
 
     /**
