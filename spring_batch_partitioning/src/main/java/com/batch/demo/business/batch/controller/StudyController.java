@@ -33,10 +33,9 @@ public class StudyController {
 
     @PostMapping(value = "/getStudy")
     public List<StudyVO> getStudyList() {
-        log.info("test");
-        List<StudyVO> myList = new ArrayList<>();
-        myList = studyService.selectFilmList();
-        return myList;
+        List<StudyVO> studyList = new ArrayList<>();
+        studyList = studyService.selectFilmList();
+        return studyList;
     }
 
 
